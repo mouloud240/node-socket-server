@@ -1,1 +1,1 @@
-export const routes=['/health','/add','/me']
+export const routes=['/health','/add','/me','/protected']

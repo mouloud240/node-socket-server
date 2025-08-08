@@ -1,0 +1,24 @@
+{
+  "name": "socket-server",
+  "type": "module",
+  "version": "1.0.0",
+  "description": "a simple tcp implementation for http",
+  "main": "index.js",
+  "scripts": {
+    "dev": "nodemon index.js",
+    "test": "echo \"True\""
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mouloud240/node-socket-server.git"
+  },
+  "author": "Mouloud",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/mouloud240/node-socket-server/issues"
+  },
+  "homepage": "https://github.com/mouloud240/node-socket-server#readme",
+  "dependencies": {
+    "nodemon": "^3.1.10"
+  }
+}
