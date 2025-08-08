@@ -155,7 +155,7 @@ export class Router {
 
       })
         if (match) {
-          return route; // Found a matching route
+          return {route,pathSegments,routeSegments}; // Found a matching route
         }
 
       }
@@ -173,17 +173,12 @@ export class Router {
     const { path, method } = data;
 
 
-    const route =this.findRoute(path, method); 
+    const {route,pathSegments,routeSegments} =this.findRoute(path, method); 
     if (route==null) {
       sendResponse(JSON.stringify({ error: 'Route not found', status: 404 }), 404, 'json', socket);
       return;
     }
-    // Check the path if it has dynamic segments
-    const dynamicSegments= route.path.split('/').filter(segment => segment.startsWith(':'));
-    if (dynamicSegments.length > 0) {
       // Extract dynamic parameters from the path
-      const pathSegments = path.split('/');
-      const routeSegments = route.path.split('/');
       const params = {};
       for (let i = 0; i < routeSegments.length; i++) {
         if (routeSegments[i].startsWith(':')) {
@@ -193,7 +188,6 @@ export class Router {
       }
       // Add the params to the context
       ctx.data.params=params;
-    }
 
     // Apply global middlewares
     if (this.globalMiddlewares.length > 0) {
