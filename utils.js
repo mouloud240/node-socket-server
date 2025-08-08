@@ -105,14 +105,14 @@ export function parseHttpText(req){
   const [headersRaw,body]=restJoined.split('\r\n\r\n');
   const headers=parseHeaders(headersRaw.split('\n'));
   const splittedFirstLine=firstLine.split(' ')
-  const action=splittedFirstLine[0]  
+  const method=splittedFirstLine[0]  
 
   const protocol=splittedFirstLine[2]
   const url=splittedFirstLine[1]
   const {path,queryParams}=parseUrl(url)
  return {
 
-     action,
+   method,
    protocol,
    path,
    queryParams,

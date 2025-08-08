@@ -2,7 +2,7 @@ import { parseHttpText, parseUrl, sendResponse } from './utils.js';
 import {Middleware} from './middleware.js';
 import { createServer } from 'node:net';
 
-import { routes } from './routes.js';
+import { router, routes } from './routes.js';
 import Logger from './logger.js';
 import './middlewares/index.js'
 import { sendStreamResponse } from './stream.js';
@@ -13,28 +13,17 @@ const logger=new Logger('server');
 const instance = new Middleware();
 // Create the server
 
+//Define routes
+const route=router.get('/health', async (ctx) => {
+  const { socket } = ctx;
+ sendResponse(JSON.stringify({ status: 'ok' }), 200, 'json', socket);
+});
 const server = createServer((socket) => {
-
   socket.on('data', async (data)=>{
     const http=parseHttpText(data.toString())
-    const {path,queryParams,protocol,action,headers}=http;
-
     await instance.run({http,socket})
-    if (path === '/logs'){
-      const stream= fs.createReadStream('logs.txt', { encoding: 'utf8' });
-      await sendStreamResponse(stream,200,'text',socket)
-      return 0;
-    }
-    if (!routes.includes(path)){
-      const res={status:404,message:'Route not found'}
-sendResponse(JSON.stringify(res),404,'application/json',socket )
-      return 0;
-    }
-
-     sendResponse(JSON.stringify({test:'hi'}),200,'json',socket) 
-    return 0;
-  })
-  socket.on('lookup', (err, address, family) => {
+    await router.run({data:http,socket})});
+      socket.on('lookup', (err, address, family) => {
     if (err) {
       logger.error(`Lookup error: ${err.message}`);
       return;
